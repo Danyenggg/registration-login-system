@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Forgot Password</title>
+
+    <link rel="stylesheet" href="forgot.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+
+<body>
+
+    <h2>Forgot Password</h2>
+
+    <form onsubmit="return false;">
+        <label for="account">Username or Email</label>
+        <input
+            type="text"
+            id="account"
+            placeholder="Enter your username or email"
+            required
+        >
+
+        <button type="button" id="continueButton" onclick="verifyAccount()">
+            Continue
+        </button>
+
+        <p id="message" role="status" aria-live="polite"></p>
+
+        <div id="resetPassword" style="display: none;">
+
+            <label for="newPassword">New Password</label>
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="Enter your new password"
+                autocomplete="new-password"
+            >
+
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm your new password"
+                autocomplete="new-password"
+            >
+
+            <div class="button-group">
+                <button type="button" onclick="changePassword()">
+                    Reset Password
+                </button>
+
+                <button
+                    type="button"
+                    onclick="window.location.href='login.html'"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+
+        <p>
+            <a href="login.html">Back to Login</a>
+        </p>
+    </form>
+
+    <script src="forgot.js"></script>
+
+</body>
+</html>
