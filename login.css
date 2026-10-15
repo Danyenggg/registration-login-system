@@ -1,10 +1,10 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 20px;
   font-family: Arial, sans-serif;
-
   background: #ffffff;
-  height: 100vh;
+  min-height: 100vh;
+  box-sizing: border-box;
 
   display: flex;
   justify-content: center;
@@ -12,48 +12,49 @@ body {
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-
+  background: #ffffff;
   padding: 30px;
   border-radius: 15px;
 
-  
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+  border: 1px solid #d6e7ff;
+  box-shadow: 0 8px 30px rgba(0, 123, 255, 0.18);
 
   text-align: center;
   width: 300px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 h2 {
-  color: #000;
+  color: #000000;
 }
 
 input {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
+  box-sizing: border-box;
 
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 8px;
-
   outline: none;
 }
 
 input:focus {
   border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
 }
 
 button {
   width: 100%;
   padding: 10px;
-
   border: none;
   border-radius: 8px;
 
   background: #007BFF;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 button:hover {
@@ -70,7 +71,7 @@ button:hover {
 }
 
 .links p {
-  color: #000;
+  color: #000000;
   font-size: 14px;
 }
 
@@ -86,7 +87,7 @@ button:hover {
 .forgot {
   display: block;
   margin-top: 5px;
-  margin-right: 200px; 
   margin-bottom: 20px;
   font-size: 13px;
+  text-align: left;
 }
