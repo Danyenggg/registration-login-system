@@ -1,23 +1,37 @@
- alert("Login JS is running");
+
 document.getElementById("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
-  let user = document.getElementById("username").value.trim();
-  let pass = document.getElementById("password").value.trim();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value;
 
-  let savedUser = localStorage.getItem("username");
-  let savedPass = localStorage.getItem("password");
+  const savedUsername = localStorage.getItem("username");
+  const savedPassword = localStorage.getItem("password");
 
-  
-  if (savedUser === null || savedPass === null) {
+  if (savedUsername === null || savedPassword === null) {
     alert("No account found. Please register first.");
     return;
   }
 
-  
-  if (user === savedUser && pass === savedPass) {
+  if (username === savedUsername && password === savedPassword) {
+    sessionStorage.setItem("studyspace_user", username);
+
     alert("Login successful!");
-    window.location.href = "dashboard.html";
+
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get("next");
+    const allowedPages = [
+      "study-dashboard.html",
+      "spaces.html",
+      "reservations.html",
+      "admin.html"
+    ];
+
+    if (next && allowedPages.includes(next)) {
+      window.location.href = next;
+    } else {
+      window.location.href = "study-dashboard.html";
+    }
   } else {
     alert("Incorrect username or password!");
   }
