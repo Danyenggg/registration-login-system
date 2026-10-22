@@ -1,4 +1,5 @@
-// Public key para sa EmailJs
+
+ // Public key para sa EmailJS
 emailjs.init({
     publicKey: "x26uA0Cqaligbqqil"
 });
@@ -6,15 +7,79 @@ emailjs.init({
 var verifiedUsername = "";
 var verifiedEmail = "";
 
+var newPasswordInput = document.getElementById("newPassword");
+var confirmPasswordInput = document.getElementById("confirmPassword");
+var confirmGroup = document.getElementById("forgotConfirmGroup");
+
+var passwordRequirements = {
+    length: document.getElementById("forgot-length"),
+    upper: document.getElementById("forgot-upper"),
+    lower: document.getElementById("forgot-lower"),
+    number: document.getElementById("forgot-number"),
+    special: document.getElementById("forgot-special")
+};
+
+function checkPassword(password) {
+    return {
+        length: password.length >= 8,
+        upper: /[A-Z]/.test(password),
+        lower: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[^A-Za-z0-9\s]/.test(password)
+    };
+}
+
+function isStrongPassword(password) {
+    var result = checkPassword(password);
+
+    return result.length &&
+        result.upper &&
+        result.lower &&
+        result.number &&
+        result.special;
+}
+
+function updatePasswordRequirements() {
+    var password = newPasswordInput.value;
+    var result = checkPassword(password);
+
+    Object.keys(passwordRequirements).forEach(function (key) {
+        var item = passwordRequirements[key];
+
+        item.classList.remove("valid", "invalid");
+
+        if (password.length > 0) {
+            item.classList.add(
+                result[key] ? "valid" : "invalid"
+            );
+        }
+    });
+
+    if (password.length > 0) {
+        confirmGroup.style.display = "block";
+        confirmPasswordInput.disabled = false;
+        confirmPasswordInput.required = true;
+    } else {
+        confirmGroup.style.display = "none";
+        confirmPasswordInput.disabled = true;
+        confirmPasswordInput.required = false;
+        confirmPasswordInput.value = "";
+    }
+}
+
+newPasswordInput.addEventListener("input", updatePasswordRequirements);
+
 async function verifyAccount() {
     var account = document.getElementById("account").value.trim();
     var savedUsername = localStorage.getItem("username");
     var savedEmail = localStorage.getItem("email");
     var message = document.getElementById("message");
     var resetSection = document.getElementById("resetPassword");
+    var otpSection = document.getElementById("otpSection");
     var continueButton = document.getElementById("continueButton");
 
     resetSection.style.display = "none";
+    otpSection.style.display = "none";
 
     if (!account) {
         message.textContent = "Please enter your username or email.";
@@ -66,23 +131,26 @@ async function verifyAccount() {
 
         resetSection.style.display = "block";
 
+        newPasswordInput.value = "";
+        confirmPasswordInput.value = "";
+        updatePasswordRequirements();
+
     } catch (error) {
-    console.error("EmailJS error:", error);
+        console.error("EmailJS error:", error);
 
-    message.textContent =
-        "Email error: " +
-        (error.text || error.message || JSON.stringify(error));
+        message.textContent =
+            "Email error: " +
+            (error.text || error.message || JSON.stringify(error));
 
-    message.style.color = "red";
-
+        message.style.color = "red";
     } finally {
         continueButton.disabled = false;
     }
 }
 
 function changePassword() {
-    var newPassword = document.getElementById("newPassword").value;
-    var confirmPassword = document.getElementById("confirmPassword").value;
+    var newPassword = newPasswordInput.value;
+    var confirmPassword = confirmPasswordInput.value;
     var message = document.getElementById("message");
 
     if (!verifiedUsername || !verifiedEmail) {
@@ -91,8 +159,21 @@ function changePassword() {
         return;
     }
 
-    if (!newPassword || !confirmPassword) {
-        message.textContent = "Please fill in both password fields.";
+    if (!newPassword) {
+        message.textContent = "Please create a new password.";
+        message.style.color = "red";
+        return;
+    }
+
+    if (!isStrongPassword(newPassword)) {
+        message.textContent =
+            "Password must have at least 8 characters, uppercase and lowercase letters, a number, and a special character.";
+        message.style.color = "red";
+        return;
+    }
+
+    if (!confirmPassword) {
+        message.textContent = "Please re-enter your password.";
         message.style.color = "red";
         return;
     }
